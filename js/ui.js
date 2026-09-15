@@ -12,6 +12,7 @@ class UIManager {
 
     this.tempSubtasks = [];
     this.currentLayout = 'list'; // 'list' | 'grid'
+    this.expandedTaskIds = new Set();
   }
 
   /**
@@ -151,22 +152,41 @@ class UIManager {
 
           <!-- Subtasks counter -->
           ${totalSub > 0 ? `
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-800/80 text-slate-300">
+            <button type="button" class="subtasks-toggle-btn inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-200/50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition cursor-pointer" data-id="${task.id}">
               <i data-lucide="check-square" class="w-3 h-3 text-cyan-400"></i>
-              ${completedSub}/${totalSub}
-            </span>
+              <span>${completedSub}/${totalSub}</span>
+              <i data-lucide="${this.expandedTaskIds.has(task.id) ? 'chevron-up' : 'chevron-down'}" class="w-3 h-3 text-slate-500 dark:text-slate-400"></i>
+            </button>
           ` : ''}
 
         </div>
 
         <!-- Due Date -->
         ${task.dueDate ? `
-          <div class="flex items-center gap-1 text-[11px] ${isOverdue ? 'text-rose-400 font-semibold' : 'text-slate-400'}">
-            <i data-lucide="calendar" class="w-3 h-3 ${isOverdue ? 'text-rose-400' : 'text-slate-500'}"></i>
+          <div class="flex items-center gap-1 text-[11px] ${isOverdue ? 'text-rose-400 font-semibold' : 'text-slate-500 dark:text-slate-400'}">
+            <i data-lucide="calendar" class="w-3 h-3 ${isOverdue ? 'text-rose-400' : 'text-slate-400 dark:text-slate-500'}"></i>
             <span>${formattedDate} ${isOverdue ? '(Overdue)' : ''}</span>
           </div>
         ` : ''}
       </div>
+
+      <!-- Subtasks Dropdown -->
+      ${totalSub > 0 && this.expandedTaskIds.has(task.id) ? `
+        <div class="mt-3 pt-3 border-t border-slate-200 dark:border-white/5 animate-fade-in subtasks-dropdown-container">
+          <ul class="space-y-1.5 list-none m-0 p-0">
+            ${task.subtasks.map(st => `
+              <li class="flex items-center gap-2.5 p-2 rounded-lg bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 transition-colors">
+                <button type="button" class="inline-subtask-check w-4 h-4 rounded border ${st.completed ? 'bg-violet-600 border-violet-600 text-white' : 'border-slate-300 dark:border-slate-600 text-transparent hover:border-violet-400 outline-none'} flex items-center justify-center transition shrink-0" data-task-id="${task.id}" data-subtask-id="${st.id}">
+                  <i data-lucide="check" class="w-3 h-3 stroke-[3]"></i>
+                </button>
+                <span class="text-xs ${st.completed ? 'text-slate-400 line-through decoration-violet-500/50' : 'text-slate-700 dark:text-slate-200'}">
+                  ${this.escapeHTML(st.title)}
+                </span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      ` : ''}
     `;
 
     return article;
@@ -223,8 +243,8 @@ class UIManager {
       const isActive = activeTag === cat;
       btn.type = 'button';
       btn.className = `tag-filter-btn px-2.5 py-1 rounded-lg text-xs font-medium transition ${isActive
-          ? 'bg-violet-600 text-white font-semibold'
-          : 'bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-700/80 border border-white/5'
+        ? 'bg-violet-600 text-white font-semibold'
+        : 'bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-700/80 border border-white/5'
         }`;
       btn.dataset.category = cat;
       btn.textContent = cat;

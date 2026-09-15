@@ -4,6 +4,11 @@
   <p><strong>A Modern, High-Performance Task & Productivity Suite</strong></p>
   
   <p>
+    <a href="https://ankan-76.github.io/task-manager/" target="_blank"><strong>View Live Demo</strong></a> • 
+    <a href="https://github.com/Ankan-76/task-manager" target="_blank"><strong>GitHub Repository</strong></a>
+  </p>
+  
+  <p>
     <a href="#features">Features</a> • 
     <a href="#tech-stack">Tech Stack</a> • 
     <a href="#getting-started">Getting Started</a> • 
@@ -15,7 +20,7 @@
 
 ## 📖 Overview
 
-**TaskFlow** is a production-grade, zero-dependency client-side task management application. Designed with a sleek dual **Light & Dark Glassmorphism** theme, it features smooth micro-interactions, full keyboard accessibility, and instant `localStorage` persistence. Whether you are managing complex workloads or simply organizing day-to-day items, TaskFlow delivers an intuitive and frictionless experience.
+**TaskFlow** is a production-grade, zero-dependency client-side task management application. Designed with a sleek dual **Light & Dark Glassmorphism** theme, it features smooth micro-interactions, full keyboard accessibility, and instant `localStorage` persistence. The app comes pre-loaded with **5 built-in demo tasks** that dynamically demonstrate all features on your very first visit. Whether you are managing complex workloads or simply organizing day-to-day items, TaskFlow delivers an intuitive and frictionless experience.
 
 ---
 
@@ -26,7 +31,7 @@
 - **🎉 Deep Micro-Interactions:** Enjoy fluid cubic bezier layout transitions, scale-in animations for modals, subtle UI hover states, and celebratory confetti upon task completion. 
 - **✅ Comprehensive CRUD:**
   - Create tasks with detailed titles, descriptions, due dates, priority tiers (Urgent, High, Medium, Low), and category tags.
-  - Interactive, dynamic subtask/checklist builder.
+  - **Inline Subtask Dropdown:** Effortlessly manage project checkboxes instantly from the main view using interactive inline checklists.
   - Soft-delete functionality with an actionable "Undo" notification toast.
   - Instant task duplication and complete trash purging.
 - **💾 Data Portability:** Fearless workflow persistence. You can securely back up your entire database to a JSON file and restore it effortlessly across devices.
@@ -57,8 +62,8 @@ You just need a local HTTP web server. You can use Python, Node's `serve`, or th
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Ankan-76/taskflow.git
-   cd taskflow
+   git clone https://github.com/Ankan-76/task-manager.git
+   cd task-manager
    ```
 
 2. **Serve the directory:**

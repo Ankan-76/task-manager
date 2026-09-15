@@ -12,45 +12,75 @@ class StorageManager {
   static DEFAULT_SEED = [
     {
       id: 'task-seed-1',
-      title: 'Architect smart contract security audit protocol',
-      description: 'Implement automated fuzz testing and run formal verification on the vault contracts.',
+      title: 'Complete highly critical server migration',
+      description: 'The legacy database cluster is reaching EOL. Need to migrate to the new PostgreSQL cloud instance immediately to avoid downtime.',
       priority: 'Urgent',
-      category: 'Security',
-      dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0], // Tomorrow
+      category: 'DevOps',
+      dueDate: new Date().toISOString().split('T')[0],
       completed: false,
       isDeleted: false,
       createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
       subtasks: [
-        { id: 'st-1', title: 'Setup Slither & Mythril scanners', completed: true },
-        { id: 'st-2', title: 'Verify reentrancy guard coverage', completed: false }
+        { id: 'st-1', title: 'Backup all user records', completed: true },
+        { id: 'st-2', title: 'Test the failover mechanisms', completed: false },
+        { id: 'st-3', title: 'Update DNS records', completed: false }
       ]
     },
     {
       id: 'task-seed-2',
-      title: 'Redesign dark-mode dashboard micro-interactions',
-      description: 'Tune cubic bezier transitions, backdrop blur, and accessible focus rings.',
+      title: 'Finalize Light/Dark mode design system',
+      description: 'Audit the contrast ratios and update Tailwind configuration to ensure both themes meet WCAG accessibility standards.',
       priority: 'High',
       category: 'Design',
-      dueDate: new Date().toISOString().split('T')[0], // Today
+      dueDate: new Date(Date.now() + 86400000).toISOString().split('T')[0],
       completed: false,
       isDeleted: false,
       createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
       subtasks: [
-        { id: 'st-3', title: 'Inspect WCAG 2.1 AA contrast ratios', completed: true },
-        { id: 'st-4', title: 'Benchmark mobile framerate on 120Hz screens', completed: true }
+        { id: 'st-4', title: 'Ensure glass effects are visible in light mode', completed: true },
+        { id: 'st-5', title: 'Update hover states for mobile', completed: false }
       ]
     },
     {
       id: 'task-seed-3',
-      title: 'Optimize Tailwind CSS production bundle sizes',
-      description: 'Purge unused classes and configure CSS sub-resource integrity headers.',
+      title: 'Prepare Q3 performance and analytics report',
+      description: 'Compile the user retention metrics from the dashboard and format them into the executive review deck.',
       priority: 'Medium',
-      category: 'Engineering',
-      dueDate: new Date(Date.now() + 86400000 * 3).toISOString().split('T')[0],
-      completed: true,
+      category: 'Management',
+      dueDate: new Date(Date.now() + 86400000 * 4).toISOString().split('T')[0],
+      completed: false,
       isDeleted: false,
       createdAt: new Date(Date.now() - 3600000 * 72).toISOString(),
       subtasks: []
+    },
+    {
+      id: 'task-seed-4',
+      title: 'Research WebGPU integrations for 3D graphics',
+      description: 'Explore new capabilities in the WebGPU API to upgrade our rendering pipelines on the front-end.',
+      priority: 'Low',
+      category: 'Research',
+      dueDate: '',
+      completed: false,
+      isDeleted: false,
+      createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+      subtasks: [
+        { id: 'st-6', title: 'Read the MDN WebGPU spec', completed: false }
+      ]
+    },
+    {
+      id: 'task-seed-5',
+      title: 'Patch authentication vulnerability',
+      description: 'Fixed the JWT token expiration bug where stale refresh tokens could still generate active sessions.',
+      priority: 'Urgent',
+      category: 'Security',
+      dueDate: new Date(Date.now() - 86400000 * 2).toISOString().split('T')[0],
+      completed: true,
+      isDeleted: false,
+      createdAt: new Date(Date.now() - 3600000 * 96).toISOString(),
+      subtasks: [
+        { id: 'st-7', title: 'Invalidate all existing tokens', completed: true },
+        { id: 'st-8', title: 'Deploy hotfix patch', completed: true }
+      ]
     }
   ];
 
@@ -136,6 +166,24 @@ class StorageManager {
   }
 
   /**
+   * Toggle completion flag for a nested subtask
+   */
+  static toggleSubtaskComplete(taskId, subtaskId) {
+    const tasks = this.getTasks();
+    const task = tasks.find(t => t.id === taskId);
+    if (!task || !task.subtasks) return null;
+
+    const subtask = task.subtasks.find(st => st.id === subtaskId);
+    if (!subtask) return null;
+
+    subtask.completed = !subtask.completed;
+
+    // Auto-complete main task if all subtasks are complete? Optional. Let's just toggle subtask.
+    this.saveTasks(tasks);
+    return task;
+  }
+
+  /**
    * Soft delete (moves task to Trash)
    */
   static softDeleteTask(id) {
@@ -212,7 +260,7 @@ class StorageManager {
   static recordActivityStreak() {
     const today = new Date().toISOString().split('T')[0];
     const data = JSON.parse(localStorage.getItem(this.STREAK_KEY) || '{"lastActive":"","streak":1}');
-    
+
     if (!data.lastActive) {
       data.lastActive = today;
       data.streak = 1;
@@ -220,7 +268,7 @@ class StorageManager {
       const last = new Date(data.lastActive);
       const current = new Date(today);
       const diffDays = Math.round((current - last) / (1000 * 3600 * 24));
-      
+
       if (diffDays === 1) {
         data.streak += 1;
       } else if (diffDays > 1) {

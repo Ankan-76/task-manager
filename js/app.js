@@ -245,6 +245,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Delegated Task Container Clicks
   document.getElementById('taskContainer').addEventListener('click', (e) => {
+    // 0. Toggle Subtasks Dropdown
+    const subtaskToggleBtn = e.target.closest('.subtasks-toggle-btn');
+    if (subtaskToggleBtn) {
+      const id = subtaskToggleBtn.dataset.id;
+      if (ui.expandedTaskIds.has(id)) {
+        ui.expandedTaskIds.delete(id);
+      } else {
+        ui.expandedTaskIds.add(id);
+      }
+      refreshWorkspace();
+      return;
+    }
+
+    // 0.1 Check inline subtask
+    const inlineSubcheck = e.target.closest('.inline-subtask-check');
+    if (inlineSubcheck) {
+      const taskId = inlineSubcheck.dataset.taskId;
+      const subtaskId = inlineSubcheck.dataset.subtaskId;
+      StorageManager.toggleSubtaskComplete(taskId, subtaskId);
+      refreshWorkspace();
+      return;
+    }
+
     // 1. Toggle Complete
     const toggleBtn = e.target.closest('.task-toggle-btn');
     if (toggleBtn) {
