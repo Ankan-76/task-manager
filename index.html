@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth transition-colors duration-500">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO & Social Graph Meta Tags -->
+  <title>TaskFlow &mdash; Modern Dark-Mode Task Architecture</title>
+  <meta name="description"
+    content="A high-performance, client-side task and productivity suite with micro-interactions, dark glassmorphism, and instant browser persistence." />
+  <meta name="keywords"
+    content="task management, productivity app, todo, tailwindcss, vanilla js, github pages, dark mode" />
+  <meta name="author" content="TaskFlow Systems" />
+  <meta name="theme-color" content="#0B0F17" />
+
+  <meta property="og:title" content="TaskFlow — Minimalist Task Management" />
+  <meta property="og:description"
+    content="Manage workflows, track streaks, and organize high-priority projects with zero latency." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="./assets/favicon.svg" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg" />
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS Play CDN with Extended Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              bg: '#0B0F17',
+              surface: '#111827',
+              border: 'rgba(255, 255, 255, 0.08)',
+              cyan: '#06b6d4',
+              violet: '#8b5cf6',
+              pink: '#ec4899',
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="./css/custom.css" />
+</head>
+
+<body
+  class="bg-slate-50 dark:bg-[#0B0F17] text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased selection:bg-violet-500 selection:text-white transition-colors duration-500">
+
+  <!-- ================= Application Header ================= -->
+  <header
+    class="sticky top-0 z-30 glass-panel border-b border-slate-200 dark:border-white/10 px-4 lg:px-8 py-3.5 transition-all">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+
+      <!-- Brand & Mobile Toggle -->
+      <div class="flex items-center gap-3">
+        <button id="mobileMenuToggle" type="button" aria-label="Toggle mobile menu"
+          class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+
+        <div class="flex items-center gap-2.5 cursor-pointer select-none" id="brandLogo">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-violet-600 to-pink-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
+            <i data-lucide="check-check" class="w-5 h-5 text-white"></i>
+          </div>
+          <div>
+            <span
+              class="text-lg font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 transition-colors">TaskFlow</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar with Shortcut hint -->
+      <div class="flex-1 max-w-md hidden md:block">
+        <div class="relative flex items-center">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none"></i>
+          <input type="search" id="globalSearchInput"
+            placeholder="Search tasks, descriptions, tags... (Press / to focus)"
+            class="w-full glass-input text-sm rounded-xl pl-10 pr-10 py-2 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
+            autocomplete="off" />
+          <kbd
+            class="absolute right-3 hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700">/</kbd>
+        </div>
+      </div>
+
+      <!-- Header Action Cluster -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Backup & Restore Dropdown Trigger -->
+        <button id="backupTriggerBtn" type="button" title="Data Backup & Restore"
+          class="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 border border-slate-200 dark:border-white/5 transition flex items-center gap-1.5 text-xs font-medium">
+          <i data-lucide="database" class="w-4 h-4"></i>
+          <span class="hidden xl:inline">Data</span>
+        </button>
+
+        <!-- Theme Toggle Button -->
+        <button id="themeToggleBtn" type="button" aria-label="Toggle Light/Dark Theme"
+          class="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 border border-transparent transition flex items-center justify-center">
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+        </button>
+
+        <!-- New Task Button -->
+        <button id="openNewTaskModalBtn" type="button"
+          class="relative group overflow-hidden px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 text-white font-semibold text-sm shadow-lg shadow-violet-600/30 hover:shadow-violet-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
+          <i data-lucide="plus" class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300"></i>
+          <span>New Task</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= App Shell Body ================= -->
+  <div class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex gap-8">
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar"
+      class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0B0F17]/95 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border-r border-white/10 lg:border-none p-6 lg:p-0 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:static shrink-0">
+
+      <div class="space-y-6">
+        <!-- Close button on Mobile view -->
+        <div class="flex items-center justify-between lg:hidden mb-4">
+          <span class="text-sm font-semibold uppercase tracking-wider text-slate-400">Navigation</span>
+          <button id="closeMobileSidebar" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Primary View Navigation -->
+        <nav aria-label="Views Navigation">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-3 px-3">Workflow Views</div>
+          <ul class="space-y-1.5" id="navigationTabs">
+            <li>
+              <button data-view="all"
+                class="nav-tab-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-white bg-violet-600/20 border border-violet-500/30">
+                <span class="flex items-center gap-3">
+                  <i data-lucide="layers" class="w-4 h-4 text-violet-400"></i>
+                  <span>All Tasks</span>
+                </span>
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/10 text-slate-300"
+                  id="countAll">0</span>
+              </button>
+            </li>
+            <li>
+              <button data-view="today"
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-white/5">
+                <span class="flex items-center gap-3">
+                  <i data-lucide="calendar-check" class="w-4 h-4 text-cyan-400"></i>
+                  <span>Due Today</span>
+                </span>
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                  id="countToday">0</span>
+              </button>
+            </li>
+            <li>
+              <button data-view="upcoming"
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-white/5">
+                <span class="flex items-center gap-3">
+                  <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+                  <span>Upcoming</span>
+                </span>
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                  id="countUpcoming">0</span>
+              </button>
+            </li>
+            <li>
+              <button data-view="completed"
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-white/5">
+                <span class="flex items-center gap-3">
+                  <i data-lucide="badge-check" class="w-4 h-4 text-emerald-400"></i>
+                  <span>Completed</span>
+                </span>
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                  id="countCompleted">0</span>
+              </button>
+            </li>
+            <li>
+              <button data-view="trash"
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-rose-400 hover:bg-rose-500/10">
+                <span class="flex items-center gap-3">
+                  <i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i>
+                  <span>Trash</span>
+                </span>
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                  id="countTrash">0</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Dynamic Category Tags Section -->
+        <section aria-labelledby="tagsHeading">
+          <div
+            class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-3 px-3">
+            <span id="tagsHeading">Categories & Tags</span>
+            <button id="clearTagFilterBtn" type="button"
+              class="text-[10px] text-violet-400 hover:underline hidden">Reset</button>
+          </div>
+          <div class="flex flex-wrap gap-1.5 px-2" id="categoriesTagContainer">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Productivity Metrics Widget -->
+      <div class="mt-8 pt-4 border-t border-white/10 space-y-4">
+        <div class="glass-card rounded-2xl p-4 relative overflow-hidden">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold text-slate-300">Completion Velocity</span>
+            <span class="text-xs font-bold text-violet-400" id="completionRateText">0%</span>
+          </div>
+          <!-- Progress Bar -->
+          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+            <div id="completionProgressBar"
+              class="h-full bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 rounded-full transition-all duration-500 ease-out"
+              style="width: 0%"></div>
+          </div>
+          <div class="flex items-center justify-between mt-3 text-[11px] text-slate-400">
+            <span id="completedVsTotalText">0 / 0 Done</span>
+            <span class="flex items-center gap-1 text-amber-400 font-semibold"
+              title="Consecutive day productivity streak">
+              <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-400"></i>
+              <span id="streakCount">1 Day Streak</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Backdrop for Mobile Sidebar -->
+    <div id="mobileSidebarBackdrop"
+      class="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm z-30 hidden lg:hidden"></div>
+
+    <!-- ================= Main Workspace Section ================= -->
+    <main class="flex-1 min-w-0 flex flex-col space-y-6">
+
+      <!-- View Controls & Active Filters Banner -->
+      <section
+        class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <h1 id="activeViewTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-white capitalize">All
+              Tasks</h1>
+            <span id="activeTasksBadge"
+              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300 border border-violet-500/30">
+              0 Items
+            </span>
+          </div>
+          <p id="activeViewSubtitle" class="text-xs text-slate-400 mt-1">Review, execute and organize all ongoing
+            deliverables.</p>
+        </div>
+
+        <!-- Filter & Layout Toggles -->
+        <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+
+          <!-- Priority Filter Selector -->
+          <div class="relative flex-1 sm:flex-initial">
+            <select id="priorityFilterSelect"
+              class="w-full appearance-none glass-input text-xs font-medium rounded-xl pl-3 pr-8 py-2 text-slate-300 focus:outline-none cursor-pointer">
+              <option value="ALL">All Priorities</option>
+              <option value="Urgent">🚨 Urgent</option>
+              <option value="High">🔥 High</option>
+              <option value="Medium">⚡ Medium</option>
+              <option value="Low">☕ Low</option>
+            </select>
+            <i data-lucide="chevron-down"
+              class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="relative flex-1 sm:flex-initial">
+            <select id="sortSelect"
+              class="w-full appearance-none glass-input text-xs font-medium rounded-xl pl-3 pr-8 py-2 text-slate-300 focus:outline-none cursor-pointer">
+              <option value="createdAt_desc">Newest First</option>
+              <option value="dueDate_asc">Due Date (Earliest)</option>
+              <option value="priority_desc">Priority (Highest)</option>
+              <option value="title_asc">Title (A-Z)</option>
+            </select>
+            <i data-lucide="arrow-down-up"
+              class="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          </div>
+
+          <!-- Layout Switch (Grid / List) -->
+          <div class="hidden sm:flex items-center bg-slate-900/80 p-1 rounded-xl border border-white/5">
+            <button id="viewListBtn" type="button" aria-label="List layout"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-white transition active-layout bg-white/10 text-white">
+              <i data-lucide="list" class="w-4 h-4"></i>
+            </button>
+            <button id="viewGridBtn" type="button" aria-label="Grid layout"
+              class="p-1.5 rounded-lg text-slate-400 hover:text-white transition">
+              <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Purge Trash Button (Only shown in Trash View) -->
+          <button id="emptyTrashBtn" type="button"
+            class="hidden px-3 py-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/30 text-xs font-semibold transition items-center gap-1.5">
+            <i data-lucide="flame" class="w-3.5 h-3.5"></i>
+            <span>Empty Trash</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Task Cards Display Area -->
+      <section id="taskContainer" class="flex flex-col gap-3 transition-all min-h-[360px]" aria-live="polite">
+        <!-- Injected dynamically via js/ui.js -->
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ================= Application Footer ================= -->
+  <footer class="w-full border-t border-slate-200 dark:border-white/5 mt-auto py-6 bg-transparent transition-colors">
+    <div
+      class="max-w-7xl mx-auto px-4 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs font-medium text-slate-500 dark:text-slate-400">
+      <p>&copy; 2026 TaskFlow. All rights reserved.</p>
+      <p>
+        Developed by
+        <a href="https://ankan-76.github.io/portfolio/" target="_blank" rel="noopener noreferrer"
+          class="text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 hover:underline transition-colors font-semibold">Ankan
+          Biswas</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ================= Task Add / Edit Native Dialog ================= -->
+  <dialog id="taskModal" class="bg-transparent p-0 m-auto max-w-xl w-[92vw] focus:outline-none">
+    <div
+      class="glass-panel border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/80 animate-scale-in text-slate-100 relative">
+
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div class="flex items-center gap-2.5">
+          <div class="p-2 rounded-xl bg-violet-500/20 text-violet-400 border border-violet-500/30">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 id="modalHeading" class="text-lg font-bold text-white">Create New Task</h2>
+            <p class="text-xs text-slate-400">Fill in the technical constraints and deadlines below.</p>
+          </div>
+        </div>
+        <button id="closeModalBtn" type="button"
+          class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Task Form -->
+      <form id="taskForm" class="mt-5 space-y-4">
+        <input type="hidden" id="taskIdInput" value="" />
+
+        <!-- Title -->
+        <div>
+          <label for="taskTitle"
+            class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Title <span
+              class="text-rose-400">*</span></label>
+          <input type="text" id="taskTitle" required placeholder="e.g., Audit Smart Contract vulnerabilities"
+            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none" />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="taskDescription"
+            class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Description</label>
+          <textarea id="taskDescription" rows="3" placeholder="Key deliverables, blockers, context links..."
+            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none resize-none"></textarea>
+        </div>
+
+        <!-- Priority, Category & Due Date Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+          <div>
+            <label for="taskPriority"
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Priority</label>
+            <select id="taskPriority"
+              class="w-full glass-input rounded-xl px-3 py-2 text-xs font-medium text-slate-200">
+              <option value="Low">☕ Low</option>
+              <option value="Medium" selected>⚡ Medium</option>
+              <option value="High">🔥 High</option>
+              <option value="Urgent">🚨 Urgent</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="taskCategory"
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Category</label>
+            <input type="text" id="taskCategory" placeholder="e.g., Security, Dev"
+              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none" />
+          </div>
+
+          <div>
+            <label for="taskDueDate"
+              class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Due Date</label>
+            <input type="date" id="taskDueDate"
+              class="w-full glass-input rounded-xl px-3 py-2 text-xs text-white focus:outline-none" />
+          </div>
+
+        </div>
+
+        <!-- Subtasks / Checklist Builder -->
+        <div class="pt-2">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Checklist &
+            Subtasks</label>
+          <div class="flex items-center gap-2 mb-2">
+            <input type="text" id="subtaskInput" placeholder="Add checklist item..."
+              class="flex-1 glass-input rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none" />
+            <button type="button" id="addSubtaskBtn"
+              class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-white/10 transition flex items-center gap-1">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add
+            </button>
+          </div>
+          <ul id="subtasksList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+            <!-- Dynamic subtask items -->
+          </ul>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="pt-4 border-t border-white/10 flex items-center justify-end gap-3">
+          <button type="button" id="cancelModalBtn"
+            class="px-4 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 text-xs font-semibold transition">
+            Cancel
+          </button>
+          <button type="submit" id="submitTaskBtn"
+            class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-cyan-600 text-white font-semibold text-xs shadow-lg shadow-violet-600/30 hover:scale-[1.02] active:scale-[0.98] transition">
+            Save Task
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </dialog>
+
+  <!-- ================= Data Backup / Import Modal ================= -->
+  <dialog id="backupModal" class="bg-transparent p-0 m-auto max-w-md w-[92vw] focus:outline-none">
+    <div class="glass-panel border border-white/15 rounded-3xl p-6 shadow-2xl animate-scale-in text-slate-100">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="database" class="w-4 h-4 text-cyan-400"></i>
+          Portability & Persistence
+        </h3>
+        <button id="closeBackupModalBtn" type="button" class="p-1 rounded-lg text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400 mt-2 mb-4">Export your tasks as a JSON document or restore previously saved task
+        states.</p>
+
+      <div class="space-y-3">
+        <button id="exportDataBtn" type="button"
+          class="w-full px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs border border-white/10 flex items-center justify-center gap-2 transition">
+          <i data-lucide="download" class="w-4 h-4 text-cyan-400"></i>
+          Export Database (JSON)
+        </button>
+
+        <label
+          class="w-full px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium text-xs border border-white/10 flex items-center justify-center gap-2 transition cursor-pointer">
+          <i data-lucide="upload" class="w-4 h-4 text-violet-400"></i>
+          <span>Import Database (JSON)</span>
+          <input type="file" id="importFileInput" accept=".json" class="hidden" />
+        </label>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ================= Toast Notification Center ================= -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"
+    aria-live="assertive">
+    <!-- Injected dynamically via js/ui.js -->
+  </div>
+
+  <!-- ================= Application Orchestration Scripts ================= -->
+  <script src="./js/storage.js"></script>
+  <script src="./js/ui.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+
+</html>
