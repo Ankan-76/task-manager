@@ -83,35 +83,35 @@
 
   <!-- ================= Application Header ================= -->
   <header
-    class="sticky top-0 z-40 glass-panel border-b border-slate-200 dark:border-white/10 px-4 lg:px-8 py-3.5 transition-all">
-    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    class="sticky top-0 z-40 glass-panel border-b border-slate-200 dark:border-white/10 px-3 sm:px-4 lg:px-8 py-2 sm:py-3.5 transition-all">
+    <div class="max-w-7xl mx-auto flex flex-wrap md:flex-nowrap items-center justify-between gap-2 sm:gap-4">
 
       <!-- Brand & Mobile Toggle -->
-      <div class="flex items-center gap-3">
+      <div class="order-1 flex items-center gap-2 sm:gap-3 shrink-0">
         <button id="mobileMenuToggle" type="button" aria-label="Toggle mobile menu"
-          class="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition">
-          <i data-lucide="menu" class="w-6 h-6"></i>
+          class="lg:hidden p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 transition">
+          <i data-lucide="menu" class="w-5 h-5 sm:w-6 sm:h-6"></i>
         </button>
 
-        <div class="flex items-center gap-2.5 cursor-pointer select-none" id="brandLogo">
+        <div class="flex items-center gap-2 sm:gap-2.5 cursor-pointer select-none" id="brandLogo">
           <div
-            class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-violet-600 to-pink-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
-            <i data-lucide="check-check" class="w-5 h-5 text-white"></i>
+            class="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-tr from-cyan-500 via-violet-600 to-pink-500 flex items-center justify-center shadow-lg shadow-violet-500/20 shrink-0">
+            <i data-lucide="check-check" class="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white"></i>
           </div>
           <div>
             <span
-              class="text-lg font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 transition-colors">TaskFlow</span>
+              class="text-sm sm:text-lg font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500 dark:from-white dark:via-slate-200 dark:to-slate-400 transition-colors">TaskFlow</span>
           </div>
         </div>
       </div>
 
-      <!-- Quick Search Bar with Shortcut hint -->
-      <div class="flex-1 max-w-md hidden md:block">
-        <div class="relative flex items-center">
-          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 pointer-events-none"></i>
+      <!-- Quick Search Bar (Row 2 on mobile, Center on desktop) -->
+      <div class="order-3 md:order-2 w-full md:w-auto md:flex-1 md:max-w-md">
+        <div class="relative flex items-center w-full">
+          <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none"></i>
           <input type="search" id="globalSearchInput"
             placeholder="Search tasks, descriptions, tags... (Press / to focus)"
-            class="w-full glass-input text-sm rounded-xl pl-10 pr-10 py-2 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none"
+            class="w-full glass-input text-xs sm:text-sm rounded-xl pl-9 sm:pl-10 pr-3 sm:pr-10 py-1.5 sm:py-2 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all"
             autocomplete="off" />
           <kbd
             class="absolute right-3 hidden lg:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 rounded border border-slate-300 dark:border-slate-700">/</kbd>
@@ -119,40 +119,41 @@
       </div>
 
       <!-- Header Action Cluster -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="order-2 md:order-3 flex items-center gap-1 sm:gap-2 shrink-0">
         <!-- Network Offline / Online Badge Indicator -->
         <div id="networkStatusBadge"
-          class="hidden items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/25 backdrop-blur-md transition-all duration-300">
+          class="hidden items-center gap-1 px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/25 backdrop-blur-md transition-all duration-300">
           <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-          <span class="text-[11px] tracking-tight">Offline</span>
+          <span class="tracking-tight">Offline</span>
         </div>
 
-        <!-- PWA Install Trigger Button (Header) -->
+        <!-- PWA Install Trigger Button (Icon-only on mobile, full 'Install App' on desktop) -->
         <button id="pwaInstallHeaderBtn" type="button" aria-label="Install TaskFlow App" title="Install TaskFlow App"
-          class="hidden px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-gradient-to-r from-violet-600/15 via-indigo-600/15 to-cyan-600/15 hover:from-violet-600/25 hover:to-cyan-600/25 text-violet-600 dark:text-cyan-400 border border-violet-500/30 hover:border-violet-500/50 shadow-sm transition-all duration-200 items-center gap-1.5 text-xs font-semibold group cursor-pointer">
+          class="p-1.5 sm:px-3 sm:py-2 rounded-xl bg-gradient-to-r from-violet-600/15 via-indigo-600/15 to-cyan-600/15 hover:from-violet-600/25 hover:to-cyan-600/25 text-violet-600 dark:text-cyan-400 border border-violet-500/30 hover:border-violet-500/50 shadow-sm transition-all duration-200 items-center gap-1.5 text-xs font-semibold group cursor-pointer shrink-0">
           <i data-lucide="download" class="w-4 h-4 text-cyan-500 dark:text-cyan-400 group-hover:translate-y-0.5 transition-transform"></i>
           <span class="hidden sm:inline">Install App</span>
         </button>
 
-        <!-- Backup & Restore Dropdown Trigger -->
-        <button id="backupTriggerBtn" type="button" title="Data Backup & Restore"
-          class="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 border border-slate-200 dark:border-white/5 transition flex items-center gap-1.5 text-xs font-medium">
+        <!-- Backup & Restore Dropdown Trigger (Icon-only on mobile, with 'Data' label on desktop) -->
+        <button id="backupTriggerBtn" type="button" title="Data Backup & Restore" aria-label="Data Backup and Restore"
+          class="flex items-center justify-center p-1.5 sm:px-2.5 sm:py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 border border-slate-200 dark:border-white/5 transition text-xs font-medium shrink-0 cursor-pointer">
           <i data-lucide="database" class="w-4 h-4"></i>
-          <span class="hidden xl:inline">Data</span>
+          <span class="hidden md:inline">Data</span>
         </button>
 
         <!-- Theme Toggle Button -->
         <button id="themeToggleBtn" type="button" aria-label="Toggle Light/Dark Theme"
-          class="p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 border border-transparent transition flex items-center justify-center">
-          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
-          <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+          class="p-1.5 sm:p-2 rounded-xl text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-white/5 border border-transparent transition flex items-center justify-center shrink-0">
+          <i data-lucide="sun" class="w-4 h-4 sm:w-5 sm:h-5 hidden dark:block"></i>
+          <i data-lucide="moon" class="w-4 h-4 sm:w-5 sm:h-5 block dark:hidden"></i>
         </button>
 
-        <!-- New Task Button -->
+        <!-- New Task Button (Always fully visible and prominent) -->
         <button id="openNewTaskModalBtn" type="button"
-          class="relative group overflow-hidden px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 text-white font-semibold text-sm shadow-lg shadow-violet-600/30 hover:shadow-violet-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
+          class="relative group overflow-hidden px-2 sm:px-4 py-1.5 sm:py-2 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-600 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-violet-600/30 hover:shadow-violet-600/50 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-1 sm:gap-2 shrink-0 cursor-pointer">
           <i data-lucide="plus" class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300"></i>
-          <span>New Task</span>
+          <span class="hidden sm:inline font-semibold">New Task</span>
+          <span class="sm:hidden font-semibold">Task</span>
         </button>
       </div>
 
@@ -250,6 +251,16 @@
             <!-- Rendered dynamically -->
           </div>
         </section>
+
+        <!-- Mobile Backup & Restore Trigger (Visible only on mobile drawer) -->
+        <button id="mobileBackupBtn" type="button"
+          class="lg:hidden w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-white/5 border border-slate-200 dark:border-white/5 transition">
+          <span class="flex items-center gap-2.5">
+            <i data-lucide="database" class="w-4 h-4 text-cyan-500 dark:text-cyan-400"></i>
+            <span>Backup & Restore (JSON)</span>
+          </span>
+          <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400"></i>
+        </button>
 
         <!-- PWA Mobile Install Banner (Visible in mobile drawer when installable) -->
         <div id="mobileInstallCard"

@@ -339,4 +339,19 @@ dialog::backdrop {
   }
 }
 
+/* Responsive Header & Install Button Adaptation */
+#pwaInstallHeaderBtn {
+  display: none !important;
+}
+
+#pwaInstallHeaderBtn.is-installable {
+  display: inline-flex !important;
+}
+
+/* Ensure Header Actions Never Overflow on Mobile */
+header .shrink-0 {
+  flex-shrink: 0;
+}
+
+
 

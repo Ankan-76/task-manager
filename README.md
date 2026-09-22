@@ -29,15 +29,17 @@
 
 - **📲 Full PWA Support:** Installable as a standalone app on Desktop (Windows, macOS, Linux) and Mobile (Android, iOS) with custom install prompts and app shortcuts.
 - **⚡ 100% Offline-Ready:** Service Worker powered by a Stale-While-Revalidate caching engine ensures the entire application runs flawlessly even without an internet connection.
+- **📱 Adaptive Mobile Header & Search:** Intelligent two-tier responsive header on mobile that keeps the brand, theme toggle, backup tools, and prominent "New Task" button fully accessible on Row 1, while providing a full-width live search bar on Row 2 (collapsing gracefully into a single row on desktop).
+- **📌 Sticky Desktop Docking:** The desktop sidebar stays docked alongside your tasks with clean scroll boundaries, eliminating layout overflow and ensuring smooth navigation on any viewport.
 - **🌓 Dynamic Light/Dark Mode:** Seamlessly switch between a premium dark glassmorphism aesthetic and a high-contrast, polished light motif. Changes are animated smoothly and persisted instantly.
-- **📱 Fully Responsive & Mobile-Polished:** Edge-to-edge layout with mobile notch safe-area support (`env(safe-area-inset-top)` / `env(safe-area-inset-bottom)`), pull-to-refresh control, and mobile navigation drawer.
-- **🎉 Deep Micro-Interactions:** Enjoy fluid cubic bezier layout transitions, scale-in animations for modals, subtle UI hover states, and celebratory confetti upon task completion. 
+- **📱 Notch & Safe-Area Polish:** Full mobile notch and home-bar safe-area support (`env(safe-area-inset-top)` / `env(safe-area-inset-bottom)`), pull-to-refresh overscroll containment, and touch-friendly drawers.
+- **🎉 Deep Micro-Interactions:** Fluid cubic bezier layout transitions, scale-in animations for modals, subtle UI hover states, and celebratory confetti upon task completion. 
 - **✅ Comprehensive CRUD:**
   - Create tasks with detailed titles, descriptions, due dates, priority tiers (Urgent, High, Medium, Low), and category tags.
   - **Inline Subtask Dropdown:** Effortlessly manage project checkboxes instantly from the main view using interactive inline checklists.
   - Soft-delete functionality with an actionable "Undo" notification toast.
   - Instant task duplication and complete trash purging.
-- **💾 Data Portability:** Fearless workflow persistence. You can securely back up your entire database to a JSON file and restore it effortlessly across devices.
+- **💾 Data Portability:** Fearless workflow persistence. You can securely back up your entire database to a JSON file and restore it effortlessly across devices from both desktop and mobile views.
 - **🚀 Velocity Tracking:** Visual dashboards highlighting real-time completion progress, streak counting, and category distribution.
 - **⚡ Zero Build Setup:** Runs natively in the browser using pure HTML5, modern Tailwind CSS (via CDN), and modular vanilla ES6+ JavaScript.
 
@@ -55,12 +57,41 @@ TaskFlow complies with modern W3C PWA standards, delivering an experience indist
 | **Quick Shortcuts** | Instant deep links for `Add New Task`, `Today's Agenda`, and `Completed Tasks` |
 | **Adaptive Icons** | Standard and Android-compliant maskable icons (192×192, 512×512) + Apple Touch Icon |
 | **iOS Guidance** | Integrated 2-step helper modal for Safari users on iOS |
+| **Install Triggers** | Adaptive header install button (Full button on desktop, Icon on mobile) + dedicated Mobile Drawer card |
 
 ### How to Install
 
 - **Desktop (Chrome / Edge / Brave):** Click the **Install App** button in the header toolbar, or click the install icon in your browser's address bar.
 - **Android (Chrome):** Tap the **Install** button in the top bar or sidebar drawer, or choose *Add to Home screen* from the Chrome menu.
 - **iOS / iPadOS (Safari):** Tap the **Share** button in Safari's bottom toolbar, scroll down, and select **Add to Home Screen**.
+
+---
+
+## 📁 Project Structure
+
+```
+task-manager/
+├── assets/                  # PWA icons, favicons & vector graphics
+│   ├── favicon.svg          # Vector branding logo
+│   ├── icon-192.png         # 192x192 Launcher Icon
+│   ├── icon-512.png         # 512x512 Store / Splash Icon
+│   ├── icon-maskable-192.png# Android Adaptive Maskable Icon
+│   ├── icon-maskable-512.png# Android Adaptive Maskable Icon
+│   ├── apple-touch-icon.png # iOS Safari Home Screen Icon
+│   ├── favicon-32x32.png    # Browser tab icon
+│   └── favicon-16x16.png    # Browser tab icon
+├── css/
+│   └── custom.css           # Glassmorphism, animations, safe-areas & scrollbars
+├── js/
+│   ├── app.js               # State machine, PWA orchestrator & routing
+│   ├── storage.js           # LocalStorage engine, JSON backup & streak tracking
+│   └── ui.js                # DOM rendering, modals, checklists & toasts
+├── index.html               # Main application shell with PWA meta tags
+├── manifest.webmanifest     # W3C Web App Manifest
+├── manifest.json            # Web App Manifest alias
+├── sw.js                    # Service Worker caching & offline engine
+└── README.md                # Documentation & architecture guide
+```
 
 ---
 

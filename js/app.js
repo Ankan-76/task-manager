@@ -397,6 +397,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Backup & Portability Actions
   backupTriggerBtn.addEventListener('click', () => backupModal.showModal());
+  const mobileBackupBtn = document.getElementById('mobileBackupBtn');
+  if (mobileBackupBtn) {
+    mobileBackupBtn.addEventListener('click', () => {
+      closeSidebarDrawer();
+      backupModal.showModal();
+    });
+  }
   closeBackupModalBtn.addEventListener('click', () => backupModal.close());
   exportDataBtn.addEventListener('click', () => {
     StorageManager.exportBackup();
@@ -548,8 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Only show install buttons if not already in standalone mode
       if (!isStandalone) {
         if (pwaInstallHeaderBtn) {
-          pwaInstallHeaderBtn.classList.remove('hidden');
-          pwaInstallHeaderBtn.classList.add('inline-flex', 'pwa-pulse');
+          pwaInstallHeaderBtn.classList.add('is-installable', 'pwa-pulse');
         }
         if (mobileInstallCard) {
           mobileInstallCard.classList.remove('hidden');
@@ -578,8 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function hideInstallUI() {
       if (pwaInstallHeaderBtn) {
-        pwaInstallHeaderBtn.classList.add('hidden');
-        pwaInstallHeaderBtn.classList.remove('inline-flex', 'pwa-pulse');
+        pwaInstallHeaderBtn.classList.remove('is-installable', 'pwa-pulse');
       }
       if (mobileInstallCard) {
         mobileInstallCard.classList.add('hidden');
@@ -596,8 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // iOS Safari fallback trigger if on iOS and not standalone
     if (isIos && !isStandalone) {
       if (pwaInstallHeaderBtn) {
-        pwaInstallHeaderBtn.classList.remove('hidden');
-        pwaInstallHeaderBtn.classList.add('inline-flex');
+        pwaInstallHeaderBtn.classList.add('is-installable');
       }
       if (mobileInstallCard) {
         mobileInstallCard.classList.remove('hidden');
