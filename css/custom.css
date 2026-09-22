@@ -250,3 +250,93 @@ html.dark .nav-tab-btn[data-view="trash"]:hover {
   color: #fb7185;
   background-color: rgba(244, 63, 94, 0.1);
 }
+
+/* ==========================================================================
+   Progressive Web App (PWA) Comfortable Architecture
+   ========================================================================== */
+
+/* Mobile Safe Area Inset Support & Gesture Polish */
+body {
+  overscroll-behavior-y: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+header {
+  padding-top: max(0.875rem, env(safe-area-inset-top));
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+#toastContainer {
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  right: max(1.5rem, env(safe-area-inset-right));
+}
+
+/* Standalone PWA Window & Display Optimization */
+@media all and (display-mode: standalone) {
+  html, body {
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Network Status Pulse & Install Animation */
+@keyframes pwa-pulse-subtle {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(139, 92, 246, 0);
+  }
+}
+
+.pwa-pulse {
+  animation: pwa-pulse-subtle 2.5s infinite;
+}
+
+/* Modal Backdrop Transition */
+dialog::backdrop {
+  animation: backdropFadeIn 0.25s ease-out forwards;
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Desktop Sidebar Sticky Scrolling Polish */
+@media (min-width: 1024px) {
+  #sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 92, 246, 0.25) transparent;
+  }
+
+  #sidebar::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  #sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  #sidebar::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.25);
+    border-radius: 9999px;
+  }
+
+  #sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+  }
+}
+
+

@@ -464,10 +464,214 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') {
       if (ui.taskModal.open) ui.closeTaskModal();
       if (backupModal.open) backupModal.close();
+      const iosModal = document.getElementById('iosInstallModal');
+      if (iosModal && iosModal.open) iosModal.close();
       closeSidebarDrawer();
     }
   });
 
-  // Bootstrapping Initial Render
+  /**
+   * ==========================================================================
+   * Progressive Web App (PWA) Architecture & Lifecycle Orchestrator
+   * ==========================================================================
+   */
+  function initializePWA() {
+    let deferredPrompt = null;
+    const pwaInstallHeaderBtn = document.getElementById('pwaInstallHeaderBtn');
+    const mobileInstallCard = document.getElementById('mobileInstallCard');
+    const mobileInstallBtn = document.getElementById('mobileInstallBtn');
+    const networkStatusBadge = document.getElementById('networkStatusBadge');
+
+    const iosInstallModal = document.getElementById('iosInstallModal');
+    const closeIosInstallModalBtn = document.getElementById('closeIosInstallModalBtn');
+    const dismissIosInstallModalBtn = document.getElementById('dismissIosInstallModalBtn');
+
+    // Detect if app is running in standalone display mode
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+
+    // Detect iOS devices
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    // Setup iOS Modal Handlers
+    if (iosInstallModal) {
+      if (closeIosInstallModalBtn) {
+        closeIosInstallModalBtn.addEventListener('click', () => iosInstallModal.close());
+      }
+      if (dismissIosInstallModalBtn) {
+        dismissIosInstallModalBtn.addEventListener('click', () => iosInstallModal.close());
+      }
+    }
+
+    // 1. Service Worker Registration & Lifecycle
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+          .then((registration) => {
+            console.log('[PWA] Service Worker registered with scope:', registration.scope);
+
+            // Check for service worker updates
+            registration.addEventListener('updatefound', () => {
+              const installingWorker = registration.installing;
+              if (installingWorker) {
+                installingWorker.addEventListener('statechange', () => {
+                  if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New version available! Prompt user to refresh
+                    ui.showToast('New version of TaskFlow available!', 'info', () => {
+                      installingWorker.postMessage({ type: 'SKIP_WAITING' });
+                    }, 'Update');
+                  }
+                });
+              }
+            });
+          })
+          .catch((err) => {
+            console.warn('[PWA] Service Worker registration failed:', err);
+          });
+
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
+      });
+    }
+
+    // 2. Install Prompt (beforeinstallprompt) Handling
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Prevent browser default mini-infobar
+      e.preventDefault();
+      deferredPrompt = e;
+
+      // Only show install buttons if not already in standalone mode
+      if (!isStandalone) {
+        if (pwaInstallHeaderBtn) {
+          pwaInstallHeaderBtn.classList.remove('hidden');
+          pwaInstallHeaderBtn.classList.add('inline-flex', 'pwa-pulse');
+        }
+        if (mobileInstallCard) {
+          mobileInstallCard.classList.remove('hidden');
+        }
+        if (window.lucide) window.lucide.createIcons();
+      }
+    });
+
+    const triggerInstallFlow = async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('[PWA] User response to install prompt:', outcome);
+        if (outcome === 'accepted') {
+          ui.showToast('TaskFlow installed successfully!', 'success');
+          hideInstallUI();
+        }
+        deferredPrompt = null;
+      } else if (isIos && !isStandalone && iosInstallModal) {
+        iosInstallModal.showModal();
+        if (window.lucide) window.lucide.createIcons();
+      } else {
+        ui.showToast('To install, use your browser\'s "Install App" or "Add to Home Screen" option.', 'info');
+      }
+    };
+
+    function hideInstallUI() {
+      if (pwaInstallHeaderBtn) {
+        pwaInstallHeaderBtn.classList.add('hidden');
+        pwaInstallHeaderBtn.classList.remove('inline-flex', 'pwa-pulse');
+      }
+      if (mobileInstallCard) {
+        mobileInstallCard.classList.add('hidden');
+      }
+    }
+
+    if (pwaInstallHeaderBtn) {
+      pwaInstallHeaderBtn.addEventListener('click', triggerInstallFlow);
+    }
+    if (mobileInstallBtn) {
+      mobileInstallBtn.addEventListener('click', triggerInstallFlow);
+    }
+
+    // iOS Safari fallback trigger if on iOS and not standalone
+    if (isIos && !isStandalone) {
+      if (pwaInstallHeaderBtn) {
+        pwaInstallHeaderBtn.classList.remove('hidden');
+        pwaInstallHeaderBtn.classList.add('inline-flex');
+      }
+      if (mobileInstallCard) {
+        mobileInstallCard.classList.remove('hidden');
+      }
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    // 3. Track App Installed Event
+    window.addEventListener('appinstalled', () => {
+      console.log('[PWA] App was successfully installed');
+      hideInstallUI();
+      ui.showToast('Welcome to TaskFlow App!', 'success');
+      deferredPrompt = null;
+    });
+
+    // 4. Online / Offline Connectivity Detection
+    function updateNetworkStatus(online) {
+      if (!networkStatusBadge) return;
+
+      if (!online) {
+        networkStatusBadge.classList.remove('hidden');
+        networkStatusBadge.classList.add('flex');
+        networkStatusBadge.innerHTML = `
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+          <span class="text-[11px] tracking-tight">Offline Mode</span>
+        `;
+        networkStatusBadge.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-500 border border-amber-500/25 backdrop-blur-md transition-all duration-300';
+        ui.showToast('Working offline. Changes are saved locally on your device.', 'warning');
+      } else {
+        networkStatusBadge.innerHTML = `
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span class="text-[11px] tracking-tight text-emerald-400">Back Online</span>
+        `;
+        networkStatusBadge.className = 'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25 backdrop-blur-md transition-all duration-300';
+        ui.showToast('You are back online!', 'success');
+        setTimeout(() => {
+          if (navigator.onLine) {
+            networkStatusBadge.classList.add('hidden');
+            networkStatusBadge.classList.remove('flex');
+          }
+        }, 3500);
+      }
+    }
+
+    window.addEventListener('online', () => updateNetworkStatus(true));
+    window.addEventListener('offline', () => updateNetworkStatus(false));
+
+    // Initial check
+    if (!navigator.onLine) {
+      updateNetworkStatus(false);
+    }
+
+    // 5. PWA Shortcuts & Deep Link Parameter Handling
+    const urlParams = new URLSearchParams(window.location.search);
+    const actionParam = urlParams.get('action');
+    const viewParam = urlParams.get('view');
+
+    if (actionParam === 'new-task') {
+      setTimeout(() => {
+        ui.openTaskModal();
+      }, 300);
+      history.replaceState({}, document.title, window.location.pathname);
+    } else if (viewParam && ['all', 'today', 'upcoming', 'completed', 'trash'].includes(viewParam)) {
+      currentView = viewParam;
+      document.querySelectorAll('#navigationTabs button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === currentView);
+      });
+      refreshWorkspace();
+      history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+  // Bootstrapping Initial Render & PWA
   refreshWorkspace();
+  initializePWA();
 });
+
