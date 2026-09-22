@@ -187,3 +187,66 @@ html:not(.dark) dialog::backdrop {
 .stagger-3 { animation-delay: 120ms; }
 .stagger-4 { animation-delay: 160ms; }
 .stagger-5 { animation-delay: 200ms; }
+
+/* Navigation Tab Buttons for Sidebar (Light & Dark theme) */
+.nav-tab-btn {
+  color: #64748b;
+  border: 1px solid transparent;
+}
+
+.nav-tab-btn:hover {
+  color: #0f172a;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-tab-btn.active {
+  color: #7c3aed;
+  background-color: rgba(124, 58, 237, 0.1);
+  border-color: rgba(124, 58, 237, 0.25);
+}
+
+.nav-tab-btn .tab-count {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #64748b;
+}
+
+.nav-tab-btn.active .tab-count {
+  background-color: rgba(124, 58, 237, 0.15);
+  color: #7c3aed;
+}
+
+html.dark .nav-tab-btn {
+  color: #94a3b8;
+  border-color: transparent;
+}
+
+html.dark .nav-tab-btn:hover {
+  color: #f1f5f9;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+html.dark .nav-tab-btn.active {
+  color: #ffffff;
+  background-color: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+html.dark .nav-tab-btn .tab-count {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+}
+
+html.dark .nav-tab-btn.active .tab-count {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.nav-tab-btn[data-view="trash"]:hover {
+  color: #e11d48;
+  background-color: rgba(244, 63, 94, 0.1);
+}
+
+html.dark .nav-tab-btn[data-view="trash"]:hover {
+  color: #fb7185;
+  background-color: rgba(244, 63, 94, 0.1);
+}

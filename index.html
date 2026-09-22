@@ -136,73 +136,74 @@
 
     <!-- Sidebar Navigation -->
     <aside id="sidebar"
-      class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0B0F17]/95 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border-r border-white/10 lg:border-none p-6 lg:p-0 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out lg:static shrink-0">
+      class="fixed inset-y-0 left-0 z-40 w-72 bg-white/95 dark:bg-[#0B0F17]/95 lg:bg-transparent backdrop-blur-2xl lg:backdrop-blur-none border-r border-slate-200 dark:border-white/10 lg:border-none p-6 lg:p-0 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out lg:static shrink-0 shadow-2xl shadow-slate-900/10 dark:shadow-black/50 lg:shadow-none">
 
       <div class="space-y-6">
         <!-- Close button on Mobile view -->
         <div class="flex items-center justify-between lg:hidden mb-4">
-          <span class="text-sm font-semibold uppercase tracking-wider text-slate-400">Navigation</span>
-          <button id="closeMobileSidebar" type="button" class="p-1.5 rounded-lg text-slate-400 hover:text-white">
+          <span class="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Navigation</span>
+          <button id="closeMobileSidebar" type="button" aria-label="Close navigation sidebar"
+            class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 transition">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
 
         <!-- Primary View Navigation -->
         <nav aria-label="Views Navigation">
-          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-3 px-3">Workflow Views</div>
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3 px-3">Workflow Views</div>
           <ul class="space-y-1.5" id="navigationTabs">
             <li>
               <button data-view="all"
-                class="nav-tab-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-white bg-violet-600/20 border border-violet-500/30">
+                class="nav-tab-btn active w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition">
                 <span class="flex items-center gap-3">
-                  <i data-lucide="layers" class="w-4 h-4 text-violet-400"></i>
+                  <i data-lucide="layers" class="w-4 h-4 text-violet-500 dark:text-violet-400"></i>
                   <span>All Tasks</span>
                 </span>
-                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/10 text-slate-300"
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold"
                   id="countAll">0</span>
               </button>
             </li>
             <li>
               <button data-view="today"
-                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-white/5">
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition">
                 <span class="flex items-center gap-3">
-                  <i data-lucide="calendar-check" class="w-4 h-4 text-cyan-400"></i>
+                  <i data-lucide="calendar-check" class="w-4 h-4 text-cyan-500 dark:text-cyan-400"></i>
                   <span>Due Today</span>
                 </span>
-                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold"
                   id="countToday">0</span>
               </button>
             </li>
             <li>
               <button data-view="upcoming"
-                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-white/5">
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition">
                 <span class="flex items-center gap-3">
-                  <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+                  <i data-lucide="clock" class="w-4 h-4 text-amber-500 dark:text-amber-400"></i>
                   <span>Upcoming</span>
                 </span>
-                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold"
                   id="countUpcoming">0</span>
               </button>
             </li>
             <li>
               <button data-view="completed"
-                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-slate-200 hover:bg-white/5">
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition">
                 <span class="flex items-center gap-3">
-                  <i data-lucide="badge-check" class="w-4 h-4 text-emerald-400"></i>
+                  <i data-lucide="badge-check" class="w-4 h-4 text-emerald-500 dark:text-emerald-400"></i>
                   <span>Completed</span>
                 </span>
-                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold"
                   id="countCompleted">0</span>
               </button>
             </li>
             <li>
               <button data-view="trash"
-                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition text-slate-400 hover:text-rose-400 hover:bg-rose-500/10">
+                class="nav-tab-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition">
                 <span class="flex items-center gap-3">
-                  <i data-lucide="trash-2" class="w-4 h-4 text-rose-400"></i>
+                  <i data-lucide="trash-2" class="w-4 h-4 text-rose-500 dark:text-rose-400"></i>
                   <span>Trash</span>
                 </span>
-                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold bg-white/5 text-slate-400"
+                <span class="tab-count px-2 py-0.5 rounded-full text-xs font-semibold"
                   id="countTrash">0</span>
               </button>
             </li>
@@ -212,10 +213,10 @@
         <!-- Dynamic Category Tags Section -->
         <section aria-labelledby="tagsHeading">
           <div
-            class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-3 px-3">
+            class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3 px-3">
             <span id="tagsHeading">Categories & Tags</span>
             <button id="clearTagFilterBtn" type="button"
-              class="text-[10px] text-violet-400 hover:underline hidden">Reset</button>
+              class="text-[10px] text-violet-600 dark:text-violet-400 hover:underline hidden">Reset</button>
           </div>
           <div class="flex flex-wrap gap-1.5 px-2" id="categoriesTagContainer">
             <!-- Rendered dynamically -->
@@ -225,23 +226,23 @@
       </div>
 
       <!-- Productivity Metrics Widget -->
-      <div class="mt-8 pt-4 border-t border-white/10 space-y-4">
+      <div class="mt-8 pt-4 border-t border-slate-200 dark:border-white/10 space-y-4">
         <div class="glass-card rounded-2xl p-4 relative overflow-hidden">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-semibold text-slate-300">Completion Velocity</span>
-            <span class="text-xs font-bold text-violet-400" id="completionRateText">0%</span>
+            <span class="text-xs font-semibold text-slate-700 dark:text-slate-300">Completion Velocity</span>
+            <span class="text-xs font-bold text-violet-600 dark:text-violet-400" id="completionRateText">0%</span>
           </div>
           <!-- Progress Bar -->
-          <div class="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+          <div class="w-full h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
             <div id="completionProgressBar"
               class="h-full bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 rounded-full transition-all duration-500 ease-out"
               style="width: 0%"></div>
           </div>
-          <div class="flex items-center justify-between mt-3 text-[11px] text-slate-400">
+          <div class="flex items-center justify-between mt-3 text-[11px] text-slate-500 dark:text-slate-400">
             <span id="completedVsTotalText">0 / 0 Done</span>
-            <span class="flex items-center gap-1 text-amber-400 font-semibold"
+            <span class="flex items-center gap-1 text-amber-500 dark:text-amber-400 font-semibold"
               title="Consecutive day productivity streak">
-              <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-400"></i>
+              <i data-lucide="flame" class="w-3.5 h-3.5 fill-amber-500 dark:fill-amber-400"></i>
               <span id="streakCount">1 Day Streak</span>
             </span>
           </div>
@@ -262,14 +263,14 @@
         class="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div class="flex items-center gap-3">
-            <h1 id="activeViewTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-white capitalize">All
+            <h1 id="activeViewTitle" class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white capitalize">All
               Tasks</h1>
             <span id="activeTasksBadge"
-              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-500/20 text-violet-300 border border-violet-500/30">
+              class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-500/20 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-500/30">
               0 Items
             </span>
           </div>
-          <p id="activeViewSubtitle" class="text-xs text-slate-400 mt-1">Review, execute and organize all ongoing
+          <p id="activeViewSubtitle" class="text-xs text-slate-500 dark:text-slate-400 mt-1">Review, execute and organize all ongoing
             deliverables.</p>
         </div>
 

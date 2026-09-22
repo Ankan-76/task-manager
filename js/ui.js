@@ -243,8 +243,8 @@ class UIManager {
       const isActive = activeTag === cat;
       btn.type = 'button';
       btn.className = `tag-filter-btn px-2.5 py-1 rounded-lg text-xs font-medium transition ${isActive
-        ? 'bg-violet-600 text-white font-semibold'
-        : 'bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-700/80 border border-white/5'
+        ? 'bg-violet-600 text-white font-semibold shadow-sm shadow-violet-500/30'
+        : 'bg-slate-200/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-300/80 dark:hover:bg-slate-700/80 border border-slate-300/50 dark:border-white/5'
         }`;
       btn.dataset.category = cat;
       btn.textContent = cat;

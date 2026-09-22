@@ -43,10 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Theme
   const initializeTheme = () => {
     const currentTheme = StorageManager.getThemePreference();
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (currentTheme === 'light') {
       document.documentElement.classList.remove('dark');
+      if (metaThemeColor) metaThemeColor.setAttribute('content', '#f8fafc');
     } else {
       document.documentElement.classList.add('dark');
+      if (metaThemeColor) metaThemeColor.setAttribute('content', '#0B0F17');
     }
   };
   initializeTheme();
@@ -168,12 +171,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!btn) return;
 
     document.querySelectorAll('.nav-tab-btn').forEach(b => {
-      b.classList.remove('active', 'text-white', 'bg-violet-600/20', 'border-violet-500/30');
-      b.classList.add('text-slate-400');
+      b.classList.remove('active');
     });
 
-    btn.classList.add('active', 'text-white', 'bg-violet-600/20', 'border-violet-500/30');
-    btn.classList.remove('text-slate-400');
+    btn.classList.add('active');
 
     currentView = btn.dataset.view;
 
@@ -440,12 +441,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Theme Toggle Button Logic
   themeToggleBtn.addEventListener('click', () => {
     const htmlEl = document.documentElement;
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (htmlEl.classList.contains('dark')) {
       htmlEl.classList.remove('dark');
       StorageManager.setThemePreference('light');
+      if (metaThemeColor) metaThemeColor.setAttribute('content', '#f8fafc');
     } else {
       htmlEl.classList.add('dark');
       StorageManager.setThemePreference('dark');
+      if (metaThemeColor) metaThemeColor.setAttribute('content', '#0B0F17');
     }
   });
 
